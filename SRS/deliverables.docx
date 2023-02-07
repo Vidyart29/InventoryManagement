@@ -1,0 +1,23 @@
+Admin portal
+
+login
+ability to add other admins
+ability to add products
+ability to change product attribute
+ability to set bulk limit
+ability to temporarily disable transactions for a product
+history of products
+
+
+
+Customer Portal
+
+login/signup
+reset password
+cart
+ability to order in bulk of a same item
+checkout using payment code
+cancel order before particular time
+email notification on successful order
+email notification on cancelled order
+history of orders
