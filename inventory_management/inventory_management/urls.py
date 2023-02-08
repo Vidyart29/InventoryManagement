@@ -20,3 +20,4 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # path('', include('inventory_app.urls'))
 ]
+urlpatterns = [path("admin/", admin.site.urls), path("", include("inventory_app.urls"))]

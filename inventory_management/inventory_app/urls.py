@@ -1,6 +1,4 @@
 from django.urls import path
-from inventory_app import views
+from . import views
 
-urlpatterns = [
-    path('', views.inventory_app, name=''),
-]
+urlpatterns = [path("", views.index)]
