@@ -5,7 +5,7 @@ class User(models.Model):
     firstName = models.CharField(max_length=30)
     lastName = models.CharField(max_length=30)
     passwordHash = models.CharField(max_length=100)
-    email = models.EmailField(unique=True)
+    email = models.CharField(unique=True, max_length=30)
 
     def __str__(self):
         return self.firstName + " " + self.lastName
@@ -15,7 +15,7 @@ class Admin(models.Model):
     firstName = models.CharField(max_length=30)
     lastName = models.CharField(max_length=30)
     passwordHash = models.CharField(max_length=100)
-    email = models.EmailField(unique=True)
+    email = models.CharField(unique=True, max_length=30)
 
     def __str__(self):
         return self.firstName + " " + self.lastName
