@@ -1,6 +1,6 @@
 from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 # from .forms import SignUpForm
@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 @login_required(login_url="login")
 def index(request):
     return render(request, "index.html")
+
 
 def signupPage(request):
     if request.method == "POST":
@@ -23,8 +24,6 @@ def signupPage(request):
             my_user.save()
             return redirect("login")
 
-        # return HttpResponse("User is created successfully")
-        # print(fname, lname, email, pass1, pass2)
     return render(request, "signup.html")
 
 
@@ -36,8 +35,15 @@ def loginPage(request):
 
         if user is not None:
             login(request, user)
+            print("HIeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
             return redirect("index")
+
         else:
             return HttpResponse("Username or password is incorrect")
 
     return render(request, "login.html")
+
+
+def logoutPage(request):
+    logout(request)
+    return redirect("login")
