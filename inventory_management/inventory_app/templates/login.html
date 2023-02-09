@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <!-- Design by foolishdeveloper.com -->
-    <title>Glassmorphism login Form Tutorial in html css</title>
+    <title>Login in - iManage</title>
 
     <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link
@@ -134,47 +134,38 @@
   </head>
   <body>
     <header>
-      <nav>
-        <div class="logo">
-          {% load static %}
-          <img
-            src="{% static 'webLogo.svg' %}"
-            alt="Website Logo Placeholder"
-          />
-        </div>
-        <div class="icon">
-          <span class="toggle">☰</span>
-        </div>
-        <ul class="list-item">
-          <li><a href="#">Products</a></li>
-          <li><a href="#">Cart</a></li>
-          <li><a href="{% url 'signup' %}">Signup</a></li>
-          <li><a href="{% url 'login' %}">Login</a></li>
-          <li><a href="#">Profile</a></li>
-        </ul>
-      </nav>
-    </header>
+        <nav>
+          <div class="logo">
+              {% load static %}
+              <img src="{% static 'webLogo.svg' %}" alt="Website Logo Placeholder">
+          </div>
+          <div class="icon">
+            <span class="toggle">☰</span>
+          </div>
+          <ul class="list-item">
+              <li><a href="#">Products</a></li>
+              <li><a href="#">Cart</a></li>
+            <li><a href="#">Signup</a></li>
+            <li><a href="{% url 'login' %}">Login</a></li>
+            <li><a href="#">Profile</a></li>
+          </ul>
+        </nav>
+      </header>
     <div class="background">
       <div class="shape"></div>
       <div class="shape"></div>
     </div>
-    <form method="POST">
-      {% csrf_token %}
-      <h3>Login</h3>
+    <form>
+        <h3>Login Here</h3>
 
-      <label for="username">Username</label>
-      <input type="text" placeholder="Email " id="username" name="username" />
+        <label for="username">Username</label>
+        <input type="text" placeholder="Email " id="username">
 
-      <label for="password">Password</label>
-      <input
-        type="password"
-        placeholder="Password"
-        id="password"
-        name="password"
-      />
+        <label for="password">Password</label>
+        <input type="password" placeholder="Password" id="password">
 
-      <button>Log In</button>
-      <!-- <div class="social">
+        <button>Log In</button>
+        <!-- <div class="social">
           <div class="go"><i class="fab fa-google"></i>  Google</div>
           <div class="fb"><i class="fab fa-facebook"></i>  Facebook</div>
         </div> -->
