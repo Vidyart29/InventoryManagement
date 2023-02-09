@@ -71,6 +71,18 @@ def logoutPage(request):
     return redirect("login")
 
 
-def products(request):
-    products = Product.objects.all()
-    return render(request, "products.html", {"products": products})
+def products(request, category):
+    Products = Product.objects.all()
+    specificProducts = {}
+    for i in Products:
+        print(i)
+        if i.category == category:
+            specificProducts += i
+
+    return render(request, "products.html", {"products": Products})
+
+
+def categories(request):
+    # return render(request, "categories.html")
+    productCategories = ProductCategorie.objects.all()
+    return render(request, "categories.html", {"categories": productCategories})

@@ -1,75 +1,39 @@
 <html>
+  {% load static %}
   <head>
-    <style>
-      .product-box {
-        width: 300px;
-        height: 300px;
-        display: inline-block;
-        margin: 20px;
-        text-align: center;
-        border: 1px solid #ddd;
-        transition: all 0.5s ease;
-        position: relative;
-      }
-      .product-box:hover {
-        transform: scale(1.1);
-        box-shadow: 0px 0px 10px #ddd;
-        cursor: pointer;
-      }
-      .product-image {
-        width: 200px;
-        height: 200px;
-        margin: 50px auto;
-      }
-      .product-name {
-        padding: 10px;
-        font-size: 18px;
-        font-weight: bold;
-      }
-      .view-products-btn {
-        position: absolute;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        padding: 10px 20px;
-        background-color: #ddd;
-        color: #333;
-        border: none;
-        border-radius: 20px;
-        transition: all 0.5s ease;
-      }
-      .view-products-btn:hover {
-        background-color: #333;
-        color: #fff;
-        cursor: pointer;
-      }
-      .view-products-btn:active {
-        background-color: green;
-      }
-      h2 {
-        text-align: center;
-        font-size: 36px;
-        font-weight: bold;
-        margin: 50px 0px;
-      }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/categories.css' %}" />
   </head>
   <body>
+    <header>
+      {% comment %}
+      <div class="container">
+        <nav>
+          <div class="logo">
+            <img
+              src="{% static 'webLogo.svg' %}"
+              alt="Website Logo Placeholder"
+            />
+          </div>
+
+          <a href="{%  url 'products' %}">Products</a>
+          <a href="#">Cart</a>
+          <a href="{%  url 'signup' %}">Signup</a>
+          <a href="{%  url 'login' %}">Login</a>
+          <a href="#">Profile</a>
+          <a href="{%  url 'logout' %}">Logout</a>
+        </nav>
+      </div>
+      {% endcomment %}
+    </header>
     <h2>Product Categories</h2>
+    {%for category in categories %}
     <div class="product-box">
-      <img class="product-image" src="laptops.png" alt="Laptop">
-      <div class="product-name">Laptops</div>
-      <button class="view-products-btn">View Products</button>
+      <img class="product-image" src="{{ category.image }}" alt="Laptop" />
+      <div class="product-name">{{ category.name }}</div>
+      <a href="{% url 'products' category.name %}">
+        <button class="view-products-btn">View Products</button></a
+      >
     </div>
-    <div class="product-box">
-      <img class="product-image" src="router.png" alt="Router">
-      <div class="product-name">Routers</div>
-      <button class="view-products-btn">View Products</button>
-    </div>
-    <div class="product-box">
-      <img class="product-image" src="headphone.png" alt="Headphone">
-      <div class="product-name">Headphones</div>
-      <button class="view-products-btn">View Products</button>
-    </div>
+    {%endfor%}
   </body>
 </html>

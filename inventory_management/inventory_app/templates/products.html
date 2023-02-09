@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>iManage</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'css/products.css' %}"
+    />
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <nav>
+          <div class="logo">
+            <img
+              src="{% static 'webLogo.svg' %}"
+              alt="Website Logo Placeholder"
+            />
+          </div>
+
+          <a href="{%  url 'categories' %}">Categories</a>
+          <a href="#">Cart</a>
+          <a href="{%  url 'signup' %}">Signup</a>
+          <a href="{%  url 'login' %}">Login</a>
+          <a href="#">Profile</a>
+          <a href="{%  url 'logout' %}">Logout</a>
+        </nav>
+      </div>
+    </header>
+    <section>
+      <div class="container">
+        <h2>Laptops</h2>
+        <div class="product-grid">
+          {% for product in products%}
+          <div class="product">
+            <img src="{{ product.image }}" alt="Photo of laptop" />
+            <h3>{{product.productname}}</h3>
+            <h4>₹{{product.price}}</h4>
+            <br />
+            <p>{{product.description}}</p>
+            <button>Add to Cart</button>
+          </div>
+          {%endfor%}
+        </div>
+      </div>
+    </section>
+    <footer>
+      <div class="container"></div>
+    </footer>
+  </body>
+</html>
+
+{% comment %} {% for product in products %}
+<div class="card" style="width: 18rem">
+  <img class="card-img-top" src="{{ product.image }}" alt="Card image cap" />
+  <div class="card-body">
+    <h5 class="card-title">{{ product.productname }}</h5>
+    <p class="card-text">{{ product.description }}</p>
+    <p class="card-text">Price - {{ product.price }}</p>
+    <a href="#" class="btn btn-primary">Buy Now</a>
+  </div>
+</div>
+{% endfor %} {% endcomment %}
