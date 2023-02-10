@@ -1,4 +1,4 @@
-<html>
+{% extends "base.html" %} {% block content %}<html>
   {% load static %}
   <head>
     <link rel="stylesheet" href="{% static 'css/categories.css' %}" />
@@ -37,3 +37,4 @@
     {%endfor%}
   </body>
 </html>
+{% endblock content %}
