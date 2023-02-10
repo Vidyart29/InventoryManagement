@@ -10,4 +10,6 @@ urlpatterns = [
     path("products/<cat>", views.products, name="products"),
     path("products/", views.products, name="products"),
     path("categories/", views.categories, name="categories"),
+    path("email/", views.email, name="email"),
+    path("sendmail/", views.send_email, name="sendmail"),
 ]
