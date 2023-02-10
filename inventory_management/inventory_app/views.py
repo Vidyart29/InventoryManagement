@@ -6,6 +6,9 @@ from .models import *
 from django.conf import settings
 from django.core.mail import send_mail
 from .email import sendMail
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
 
 # from .forms import SignUpForm
 
@@ -27,21 +30,22 @@ def signup(request):
             my_user = User.objects.create_user(uname, email, pass1)
             my_user.save()
             return redirect("login")
-        
 
     return render(request, "signup.html")
 
 
 def loginPage(request):
+    # print("ghhghghgh")
     if request.method == "POST":
         username1 = request.POST.get("username")
         pass1 = request.POST.get("password")
         user = authenticate(request, username=username1, password=pass1)
 
+        # print(user)
         if user is not None:
             login(request, user)
-            print("HIeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
-            return redirect("index")
+            # print("HIeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
+            return redirect("products")
 
         else:
             return HttpResponse("Username or password is incorrect")
@@ -54,6 +58,7 @@ def logoutPage(request):
     return redirect("login")
 
 
+@login_required(login_url="login")
 def products(request, cat="None"):
     # id = ProductCategorie.objects.filter(category__name="Laptop")
     # Products = Product.objects.filter(category__name__contains="Laptops")
@@ -68,20 +73,68 @@ def products(request, cat="None"):
     return render(request, "products.html", {"products": Products, "cat": cat})
 
 
+@login_required(login_url="login")
 def categories(request):
     # return render(request, "categories.html")
     productCategories = ProductCategorie.objects.all()
     return render(request, "categories.html", {"categories": productCategories})
 
+
+@csrf_exempt
+def updateItem(request):
+    data = json.loads(request.body)
+    print(data)
+    productId = data["productId"]
+    action = data["action"]
+
+    print("aciton: ", action)
+    print("prouct: ", productId)
+
+    # print(request)
+    customer = request.user
+    print(customer)
+    product = Product.objects.get(id=productId)
+    order, created = Order.objects.get_or_create(customer=customer, complete=False)
+    orderItem, created = OrderItem.objects.get_or_create(order=order, product=product)
+
+    if action == "add":
+        orderItem.quantity += 1
+    elif action == "remove":
+        orderItem.quantity -= 1
+
+    orderItem.save()
+
+    if orderItem.quantity <= 0:
+        orderItem.delete()
+
+    return JsonResponse("Item was added", safe=False)
+
+
 def send_email(request):
-        # email= request.POST['email']
-        # bucode= request.POST['bucode']
+    # email= request.POST['email']
+    # bucode= request.POST['bucode']
     sendMail("vidya.rautela.28@gmail.com", "bucode")
 
     return HttpResponse("Submitted")
-    
+
+
 def email(request):
     return render(request, "email.html")
 
 
- 
+@login_required(login_url="login")
+def cart(request):
+    context = {}
+
+    if request.user.is_authenticated:
+        customer = request.user.id
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        items = order.orderitem_set.all()
+    else:
+        items = []
+        order = {"get_cart_total": 0, "get_cart_items": 0}
+
+    context = {"items": items, "order": order}
+    # print("11111111111111111111                      ", customer)
+
+    return render(request, "cart.html", context)

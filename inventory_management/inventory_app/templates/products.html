@@ -22,7 +22,13 @@
             <h4>₹{{product.price}}</h4>
             <br />
             <p>{{product.description}}</p>
-            <button>Add to Cart</button>
+            <button
+              data-product="{{product.id}}"
+              data-action="add"
+              class="update-cart"
+            >
+              Add to Cart
+            </button>
           </div>
           {%endfor%}
         </div>

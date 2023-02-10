@@ -8,6 +8,10 @@
     <meta name="description" content="" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+
+    <script type="text/javascript">
+      var user = "{{request.user}}";
+    </script>
   </head>
   <body>
     <header>
@@ -25,15 +29,19 @@
           {% if request.user.is_authenticated %}
           <li><a href="{%  url 'categories' %}">Categories</a></li>
           <li><a href="{%  url 'products' None %}">Products</a></li>
-          <li><a href="#">Cart</a></li>
-          {% endif %}
+          <li><a href="{%  url 'cart' %}">Cart</a></li>
+          {% endif %} {% if request.user.is_authenticated is False%}
           <li><a href="{%  url 'signup' %}">Signup</a></li>
           <li><a href="{%  url 'login' %}">Login</a></li>
-          <li><a href="#">Profile</a></li>
+          {%endif%} {% if request.user.is_authenticated %}
+          <li><a href="#">Profile : {{request.user}}</a></li>
           <li><a href="{%  url 'logout' %}">Logout</a></li>
+          {% endif %}
         </ul>
       </nav>
     </header>
     {% block content %}{% endblock content %}
+
+    <script type="text/javascript" src="{% static 'js/cart.js'%}"></script>
   </body>
 </html>
