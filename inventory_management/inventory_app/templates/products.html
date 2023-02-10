@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{% extends "base.html" %} {% block content %}<!DOCTYPE html>
 {% load static %}
 <html>
   <head>
@@ -11,25 +11,6 @@
     />
   </head>
   <body>
-    <header>
-      <div class="container">
-        <nav>
-          <div class="logo">
-            <img
-              src="{% static 'webLogo.svg' %}"
-              alt="Website Logo Placeholder"
-            />
-          </div>
-
-          <a href="{%  url 'categories' %}">Categories</a>
-          <a href="#">Cart</a>
-          <a href="{%  url 'signup' %}">Signup</a>
-          <a href="{%  url 'login' %}">Login</a>
-          <a href="#">Profile</a>
-          <a href="{%  url 'logout' %}">Logout</a>
-        </nav>
-      </div>
-    </header>
     <section>
       <div class="container">
         <h2>{{cat}}</h2>
@@ -52,8 +33,7 @@
     </footer>
   </body>
 </html>
-
-{% comment %} {% for product in products %}
+{% endblock content %} {% comment %} {% for product in products %}
 <div class="card" style="width: 18rem">
   <img class="card-img-top" src="{{ product.image }}" alt="Card image cap" />
   <div class="card-body">
