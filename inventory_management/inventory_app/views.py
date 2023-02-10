@@ -3,13 +3,16 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .models import *
+from django.conf import settings
+from django.core.mail import send_mail
+from .email import sendMail
 
 # from .forms import SignUpForm
 
 # Create your views here.
 @login_required(login_url="login")
 def index(request):
-    return render(request, "index.html")
+    return render(request, "base.html")
 
 
 def signup(request):
@@ -24,6 +27,7 @@ def signup(request):
             my_user = User.objects.create_user(uname, email, pass1)
             my_user.save()
             return redirect("login")
+        
 
     return render(request, "signup.html")
 
@@ -68,3 +72,16 @@ def categories(request):
     # return render(request, "categories.html")
     productCategories = ProductCategorie.objects.all()
     return render(request, "categories.html", {"categories": productCategories})
+
+def send_email(request):
+        # email= request.POST['email']
+        # bucode= request.POST['bucode']
+    sendMail("vidya.rautela.28@gmail.com", "bucode")
+
+    return HttpResponse("Submitted")
+    
+def email(request):
+    return render(request, "email.html")
+
+
+ 
