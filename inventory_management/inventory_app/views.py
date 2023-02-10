@@ -50,15 +50,18 @@ def logoutPage(request):
     return redirect("login")
 
 
-def products(request, category):
-    Products = Product.objects.all()
-    specificProducts = {}
-    for i in Products:
-        print(i)
-        if i.category == category:
-            specificProducts += i
-
-    return render(request, "products.html", {"products": Products})
+def products(request, cat="None"):
+    # id = ProductCategorie.objects.filter(category__name="Laptop")
+    # Products = Product.objects.filter(category__name__contains="Laptops")
+    # print("cat ", type(cat))
+    if cat != "None":
+        Products = Product.objects.filter(category__name__contains=cat)
+    else:
+        # print("hi")
+        cat = "All Products"
+        Products = Product.objects.all()
+    print(Products)
+    return render(request, "products.html", {"products": Products, "cat": cat})
 
 
 def categories(request):
