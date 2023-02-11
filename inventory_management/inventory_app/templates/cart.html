@@ -58,7 +58,7 @@
           </div>
           <div style="flex: 2"><p>{{item.product.productName}}</p></div>
           <div style="flex: 1">
-            <p>${{item.product.price|floatformat:2}}</p>
+            <p>₹{{item.product.price|floatformat:2}}</p>
           </div>
           <div style="flex: 1">
             <p class="quantity">{{item.quantity}}</p>
@@ -78,7 +78,7 @@
               />
             </div>
           </div>
-          <div style="flex: 1"><p>${{item.get_total|floatformat:2}}</p></div>
+          <div style="flex: 1"><p>₹{{item.get_total|floatformat:2}}</p></div>
         </div>
         {% endfor %}
       </div>

@@ -61,13 +61,13 @@ class Product(models.Model):
         return self.productName
 
 
-class orderHistory(models.Model):
-    user = models.ForeignKey(User, default=1, on_delete=models.SET_DEFAULT)
-    date = models.DateTimeField()
-    product = models.ForeignKey(Product, default=1, on_delete=models.SET_DEFAULT)
+# class orderHistory(models.Model):
+#     user = models.ForeignKey(User, default=1, on_delete=models.SET_DEFAULT)
+#     date = models.DateTimeField()
+#     product = models.ForeignKey(Product, default=1, on_delete=models.SET_DEFAULT)
 
-    def __str__(self):
-        return self.date + " " + self.product
+#     def __str__(self):
+#         return self.date + " " + self.product
 
 
 class Order(models.Model):
@@ -89,7 +89,7 @@ class Order(models.Model):
         return total
 
     def __str__(self):
-        return str(self.customer)
+        return self.customer.username + "-" * 10 + "Complete: " + str(self.complete)
 
 
 class OrderItem(models.Model):

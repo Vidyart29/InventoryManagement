@@ -6,6 +6,6 @@ from .models import *
 admin.site.register(Admin)
 admin.site.register(Product)
 admin.site.register(ProductCategorie)
-admin.site.register(orderHistory)
+# admin.site.register(orderHistory)
 admin.site.register(Order)
 admin.site.register(OrderItem)

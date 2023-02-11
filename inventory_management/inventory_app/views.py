@@ -9,6 +9,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 from threading import Thread
+import datetime
 
 # from .forms import SignUpForm
 
@@ -110,24 +111,12 @@ def updateItem(request):
     return JsonResponse("Item was added", safe=False)
 
 
-def send_email(request):
-    # email= request.POST['email']
-    # bucode= request.POST['bucode']
-    sendMail("vidya.rautela.28@gmail.com", "bucode")
-
-    return HttpResponse("Submitted")
-
-
-def email(request):
-    return render(request, "email.html")
-
-
 @login_required(login_url="login")
 def cart(request):
     context = {}
 
     if request.user.is_authenticated:
-        customer = request.user.id
+        customer = request.user
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
         items = order.orderitem_set.all()
     else:
@@ -142,6 +131,14 @@ def cart(request):
         # condition will be enough items in inventory
         condition = True
         if condition:
+            transaction_id = datetime.datetime.now().timestamp()
+            print("order started")
+            order.complete = True
+            order.transaction_id = transaction_id
+            order.save()
+            print("rder saved")
+
+            # email logic
             content = request.POST.get("bucode")
             email = request.user.email
             thread = Thread(target=sendMail, args=(email, content))
@@ -152,30 +149,3 @@ def cart(request):
             return HttpResponse("No Stock Available")
 
     return render(request, "cart.html", context)
-
-
-# def checkout(request):
-#     context = {}
-
-#     if request.user.is_authenticated:
-#         customer = request.user.id
-#         order, created = Order.objects.get_or_create(customer=customer, complete=False)
-#         items = order.orderitem_set.all()
-#     else:
-#         items = []
-#         order = {"get_cart_total": 0, "get_cart_items": 0}
-
-#     context = {"items": items, "order": order}
-
-#     # condition will be for inventory stock checking
-#     if request.method == "POST":
-#         condition = True
-#         if condition:
-#             # content = request.post.get("bucode")
-#             # thread = Thread(target=sendMail, args=(content))
-#             sendMail("dsouzajenslee@gmail.com", "hiiiiiiiiiiiiiii")
-#             return HttpResponse("Checked out successfully")
-#         else:
-#             return HttpResponse("No Stock Available")
-#     else:
-#         return render(request, "checkout.html", context)
