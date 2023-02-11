@@ -160,6 +160,7 @@ def cart(request):
     items = order.orderitem_set.all()
 
     if request.method == "POST":
+        bu_code = request.POST.get("bucode")
         # Check if there are enough items in stock
         for item in items:
             if item.quantity <= item.product.quantity:
@@ -172,9 +173,10 @@ def cart(request):
             item.product.quantity -= item.quantity
             item.product.save()
 
-            # Set transaction id
+            # Set transaction id and bu_code
             transaction_id = str(uuid.uuid4())[:8]
             order.transaction_id = transaction_id
+            order.buCode = bu_code
 
             # Set the order to complete and save
             order.complete = True
@@ -182,7 +184,7 @@ def cart(request):
             order.save()
 
             # email logic
-            content = request.POST.get("bucode")
+            content = bu_code
             email = request.user.email
             thread = Thread(target=sendMail, args=(email, content))
             thread.start()
