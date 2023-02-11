@@ -24,7 +24,13 @@
               {% csrf_token %}
 
               <label for="bucode">BU Code</label>
-              <input type="text" placeholder="EU5" id="bucode" name="bucode" />
+              <input
+                type="text"
+                placeholder="EU5"
+                id="bucode"
+                value="0000"
+                name="bucode"
+              />
 
               <button>Checkout</button>
             </form>
