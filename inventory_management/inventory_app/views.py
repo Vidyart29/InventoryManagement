@@ -4,11 +4,11 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .models import *
 from django.conf import settings
-from django.core.mail import send_mail
 from .email import sendMail
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
+from threading import Thread
 
 # from .forms import SignUpForm
 
@@ -137,14 +137,45 @@ def cart(request):
     context = {"items": items, "order": order}
     # print("11111111111111111111                      ", customer)
 
+    if request.method == "POST":
+
+        # condition will be enough items in inventory
+        condition = True
+        if condition:
+            content = request.POST.get("bucode")
+            email = request.user.email
+            thread = Thread(target=sendMail, args=(email, content))
+            thread.start()
+            # sendMail("dsouzajenslee@gmail.com", "hiiiiiiiiiiiiiii")
+            return HttpResponse("Checked out successfully")
+        else:
+            return HttpResponse("No Stock Available")
+
     return render(request, "cart.html", context)
 
 
-def checkout(request):
-    # condition will be for inventory stock checking
-    condition = True
-    if condition:
-        sendMail("dsouzajenslee@gmail.com", "bucode")
-        return HttpResponse("Checked out successfully")
-    else:
-        return HttpResponse("No Stock Available")
+# def checkout(request):
+#     context = {}
+
+#     if request.user.is_authenticated:
+#         customer = request.user.id
+#         order, created = Order.objects.get_or_create(customer=customer, complete=False)
+#         items = order.orderitem_set.all()
+#     else:
+#         items = []
+#         order = {"get_cart_total": 0, "get_cart_items": 0}
+
+#     context = {"items": items, "order": order}
+
+#     # condition will be for inventory stock checking
+#     if request.method == "POST":
+#         condition = True
+#         if condition:
+#             # content = request.post.get("bucode")
+#             # thread = Thread(target=sendMail, args=(content))
+#             sendMail("dsouzajenslee@gmail.com", "hiiiiiiiiiiiiiii")
+#             return HttpResponse("Checked out successfully")
+#         else:
+#             return HttpResponse("No Stock Available")
+#     else:
+#         return render(request, "checkout.html", context)
