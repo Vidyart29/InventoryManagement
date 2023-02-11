@@ -94,6 +94,7 @@ class Order(models.Model):
             + "-" * 10
             + "Complete: "
             + str(self.complete)
+            + "-" * 10
             + " id : "
             + str(self.transaction_id)
         )
