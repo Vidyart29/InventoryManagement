@@ -184,10 +184,9 @@ def cart(request):
             order.date_ordered = datetime.datetime.now()
             order.save()
 
-            # email logic
-            content = bu_code
+            # Email logic
             email = request.user.email
-            thread = Thread(target=sendMail, args=(email, content))
+            thread = Thread(target=sendMail, args=(email, order, items))
             thread.start()
             return HttpResponse("Checked out successfully")
         else:
