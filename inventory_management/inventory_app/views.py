@@ -10,6 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from threading import Thread
 import datetime
+import uuid
 
 # from .forms import SignUpForm
 
@@ -17,6 +18,51 @@ import datetime
 @login_required(login_url="login")
 def index(request):
     return render(request, "base.html")
+
+
+@login_required(login_url="login")
+def profile(request):
+    context = {}
+
+    if request.user.is_authenticated:
+        customer = request.user
+        orders = Order.objects.filter(customer=customer, complete=True)
+        # items = order.orderitem_set.all()
+        # print(items)
+        orderList = []
+        for order in orders:
+            # print(i.transaction_id)
+            items = order.orderitem_set.all()
+            # currOrder = {}
+            # currOrder.update('transaction_id': items.)
+            # orderList.append()
+            # print("tid: ", order.transaction_id)
+            # print("date: ", str(order.date_ordered))
+            # print(
+            #     "list :",
+            #     [str(i.product.productName + ":" + str(i.quantity)) for i in items],
+            # )
+            oneOrder = {
+                "transaction_id": order.transaction_id,
+                "date": str(order.date_ordered),
+                "itemsInOrder": [
+                    str(i.product.productName + ":" + str(i.quantity)) for i in items
+                ],
+                "noOfItems": int(len(items)),
+            }
+            orderList.append(oneOrder)
+            # for i in orderList:
+            #     print(i)
+
+    else:
+
+        order = {"get_cart_total": 0, "get_cart_items": 0}
+    # print()
+    # print(itemList)
+    context = {"orders": orderList}
+    # print(context)
+
+    return render(request, "profile.html", context)
 
 
 def signup(request):
@@ -131,11 +177,13 @@ def cart(request):
         # condition will be enough items in inventory
         condition = True
         if condition:
-            transaction_id = datetime.datetime.now().timestamp()
+            transaction_id = uuid.uuid4()
             print("order started")
             order.complete = True
             order.transaction_id = transaction_id
+            order.date_ordered = datetime.datetime.now()
             order.save()
+            print(created)
             print("rder saved")
 
             # email logic
