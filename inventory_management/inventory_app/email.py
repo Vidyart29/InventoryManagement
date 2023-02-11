@@ -18,8 +18,11 @@ def sendMail(emailAddress, Content):
     msg.set_content(Content)
     print("message settt")
 
-    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
-        smtp.login(fromEmail, fromPassword)
-        print("Sending mail to ", emailAddress)
-        smtp.send_message(msg)
-        print("Sent mail")
+    try:
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
+            smtp.login(fromEmail, fromPassword)
+            print("Sending mail to ", emailAddress)
+            smtp.send_message(msg)
+            print("Sent mail")
+    except Exception as e:
+        print("Email not sent; Error : ", e)
