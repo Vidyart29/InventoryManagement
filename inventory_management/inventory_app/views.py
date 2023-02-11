@@ -25,42 +25,35 @@ def profile(request):
     context = {}
 
     if request.user.is_authenticated:
+        # Get all completed orders for current logged in user
         customer = request.user
         orders = Order.objects.filter(customer=customer, complete=True)
-        # items = order.orderitem_set.all()
-        # print(items)
+
+        # Construct a list of orders as a list of dictionaries
         orderList = []
         for order in orders:
-            # print(i.transaction_id)
             items = order.orderitem_set.all()
-            # currOrder = {}
-            # currOrder.update('transaction_id': items.)
-            # orderList.append()
-            # print("tid: ", order.transaction_id)
-            # print("date: ", str(order.date_ordered))
-            # print(
-            #     "list :",
-            #     [str(i.product.productName + ":" + str(i.quantity)) for i in items],
-            # )
+
+            itemsInOrder = []
+            for item in items:
+                totalCost = item.quantity * item.product.price
+                itemsInOrder.append(
+                    str(item.product.productName + " : " + str(item.quantity))
+                )
+
+            # Construct a dictionary for every orders' attributes
             oneOrder = {
                 "transaction_id": order.transaction_id,
                 "date": str(order.date_ordered),
-                "itemsInOrder": [
-                    str(i.product.productName + ":" + str(i.quantity)) for i in items
-                ],
+                "itemsInOrder": itemsInOrder,
                 "noOfItems": int(len(items)),
+                "totalCost": totalCost,
             }
+
             orderList.append(oneOrder)
-            # for i in orderList:
-            #     print(i)
 
-    else:
-
-        order = {"get_cart_total": 0, "get_cart_items": 0}
-    # print()
-    # print(itemList)
-    context = {"orders": orderList}
-    # print(context)
+    # Reverse the list so that new orders come up first
+    context = {"orders": orderList[::-1]}
 
     return render(request, "profile.html", context)
 

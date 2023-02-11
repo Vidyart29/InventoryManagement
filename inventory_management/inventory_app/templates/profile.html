@@ -92,8 +92,8 @@
             <th class="font-weight-bold py-2 border-0 quantity">
               Date Ordered
             </th>
-            <th class="font-weight-bold py-2 border-0">Items</th>
-            <th class="font-weight-bold py-2 border-0">Price</th>
+            <th class="font-weight-bold py-2 border-0">Items : Quantity</th>
+            <th class="font-weight-bold py-2 border-0">Total Order Cost</th>
           </tr>
         </thead>
         <tbody>
@@ -108,7 +108,7 @@
                 <li>{{item}} {% endfor %}</li>
               </ul>
             </td>
-            <td>42069</td>
+            <td>₹ {{ order.totalCost}}</td>
           </tr>
           {% endfor %}
         </tbody>
