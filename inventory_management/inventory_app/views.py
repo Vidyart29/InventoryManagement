@@ -138,3 +138,13 @@ def cart(request):
     # print("11111111111111111111                      ", customer)
 
     return render(request, "cart.html", context)
+
+
+def checkout(request):
+    # condition will be for inventory stock checking
+    condition = True
+    if condition:
+        sendMail("dsouzajenslee@gmail.com", "bucode")
+        return HttpResponse("Checked out successfully")
+    else:
+        return HttpResponse("No Stock Available")
