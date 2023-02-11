@@ -75,7 +75,7 @@ class Order(models.Model):
     date_ordered = models.DateField(auto_now_add=True)
     transaction_id = models.CharField(max_length=200, null=True)
     complete = models.BooleanField(default=False, null=True, blank=False)
-    buCode = models.CharField(max_length=30, null=True)
+    buCode = models.CharField(max_length=30, default="0000")
 
     @property
     def get_cart_total(self):

@@ -89,9 +89,8 @@
         <thead>
           <tr>
             <th class="font-weight-bold py-2 border-0">Transaction ID</th>
-            <th class="font-weight-bold py-2 border-0 quantity">
-              Date Ordered
-            </th>
+            <th class="font-weight-bold py-2 border-0">BU Code</th>
+            <th class="font-weight-bold py-2 border-0">Date Ordered</th>
             <th class="font-weight-bold py-2 border-0">Items : Quantity</th>
             <th class="font-weight-bold py-2 border-0">Total Order Cost</th>
           </tr>
@@ -100,6 +99,7 @@
           {% for order in orders%}
           <tr>
             <td>{{ order.transaction_id }}</td>
+            <td>{{ order.buCode }}</td>
             <td>{{ order.date }}</td>
 
             <td>

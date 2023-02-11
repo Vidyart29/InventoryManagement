@@ -44,6 +44,7 @@ def profile(request):
             # Construct a dictionary for every orders' attributes
             oneOrder = {
                 "transaction_id": order.transaction_id,
+                "buCode": order.buCode,
                 "date": str(order.date_ordered),
                 "itemsInOrder": itemsInOrder,
                 "noOfItems": int(len(items)),
