@@ -159,41 +159,41 @@ def updateItem(request):
 
 @login_required(login_url="login")
 def cart(request):
-    context = {}
-
-    if request.user.is_authenticated:
-        customer = request.user
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        items = order.orderitem_set.all()
-    else:
-        items = []
-        order = {"get_cart_total": 0, "get_cart_items": 0}
-
-    context = {"items": items, "order": order}
-    # print("11111111111111111111                      ", customer)
+    customer = request.user
+    order, created = Order.objects.get_or_create(customer=customer, complete=False)
+    items = order.orderitem_set.all()
 
     if request.method == "POST":
+        # Check if there are enough items in stock
+        for item in items:
+            if item.quantity <= item.product.quantity:
+                enoughInventory = True
+            else:
+                enoughInventory = False
 
-        # condition will be enough items in inventory
-        condition = True
-        if condition:
-            transaction_id = uuid.uuid4()
-            print("order started")
-            order.complete = True
+        if enoughInventory:
+            # Remove the items from inventory
+            item.product.quantity -= item.quantity
+            item.product.save()
+
+            # Set transaction id
+            transaction_id = uuid.uuid4()[:8]
             order.transaction_id = transaction_id
+
+            # Set the order to complete and save
+            order.complete = True
             order.date_ordered = datetime.datetime.now()
             order.save()
-            print(created)
-            print("rder saved")
 
             # email logic
             content = request.POST.get("bucode")
             email = request.user.email
             thread = Thread(target=sendMail, args=(email, content))
             thread.start()
-            # sendMail("dsouzajenslee@gmail.com", "hiiiiiiiiiiiiiii")
             return HttpResponse("Checked out successfully")
         else:
             return HttpResponse("No Stock Available")
 
+    context = {}
+    context = {"items": items, "order": order}
     return render(request, "cart.html", context)
