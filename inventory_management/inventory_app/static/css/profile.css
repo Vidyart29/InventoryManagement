@@ -1,0 +1,15 @@
+table, td {
+    /* border: 2px solid black; */
+    border-collapse: collapse;
+    padding: 15px;
+    border-collapse: separate;
+    border-spacing: 0 1em;
+  }
+  th, td {
+    border-style: inset;
+  }
+
+.center{
+    margin-left: 30%;
+    margin-right: 10%;
+}

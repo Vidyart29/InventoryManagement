@@ -192,7 +192,7 @@ def cart(request):
             thread = Thread(target=sendMail, args=(email, content))
             thread.start()
             # sendMail("dsouzajenslee@gmail.com", "hiiiiiiiiiiiiiii")
-            return HttpResponse("Checked out successfully")
+            return redirect(url_name)
         else:
             return HttpResponse("No Stock Available")
 

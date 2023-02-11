@@ -10,21 +10,23 @@
       {%
       comment
       %}
-      href="{% static 'css/products.css' %}"
+      href="{% static 'css/profile.css' %}"
       {%
       endcomment
       %}
     />
   </head>
-  <body>
+  <body >
+    <div class="details">
+
+  
     <h1>Username: {{ request.user.username }}</h1>
 
     <h1>Email: {{ request.user.username }}</h1>
     <h1>Orders</h1>
-    <table style = "
-        border-collapse: separate;
-        border-spacing: 0 1em;
-    ">
+
+  </div>
+    <table class="center" >
       <thead>
         <tr>
           <th>Transaction ID</th>
