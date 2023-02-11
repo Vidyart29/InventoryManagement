@@ -18,10 +18,9 @@
           {% for product in products%}
           <div class="product">
             <img src="{{ product.image }}" alt="Photo of laptop" />
-            <h3>{{product.productname}}</h3>
-            <h4>₹{{product.price}}</h4>
-            <br />
-            <p>{{product.description}}</p>
+            <h3>Product Name: {{product.productName}}</h3>
+            <h4>Price: ₹{{product.price}}</h4>
+            <p>Features: {{product.description}}</p>
             <button
               data-product="{{product.id}}"
               data-action="add"

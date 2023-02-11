@@ -42,11 +42,11 @@ body {
   }
   
   .product h3 {
-    text-align: center;
+    /* text-align: center; */
     margin-top: 10px;
   }
   
   .product p {
-    text-align: center;
+    /* text-align: center; */
     font-weight: bold;
   }
