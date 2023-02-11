@@ -11,6 +11,7 @@ import json
 from threading import Thread
 import datetime
 import uuid
+from django.contrib import messages
 
 # from .forms import SignUpForm
 
@@ -163,11 +164,19 @@ def cart(request):
     if request.method == "POST":
         bu_code = request.POST.get("bucode")
         # Check if there are enough items in stock
+        notEnough = []
         for item in items:
             if item.quantity <= item.product.quantity:
                 enoughInventory = True
             else:
                 enoughInventory = False
+                notEnough.append(
+                    {
+                        "productName": item.product.productName,
+                        "requestedQuantity": item.quantity,
+                        "availableQuantity": item.product.quantity,
+                    }
+                )
 
         if enoughInventory:
             # Remove the items from inventory
@@ -184,13 +193,35 @@ def cart(request):
             order.date_ordered = datetime.datetime.now()
             order.save()
 
+            # Util logic
+            myitems = []
+            for i in items:
+                myitems.append(str(i))
+                totalCost = i.quantity * i.product.price
+
             # Email logic
             email = request.user.email
-            thread = Thread(target=sendMail, args=(email, order, items))
+            thread = Thread(target=sendMail, args=(email, order, myitems, totalCost))
             thread.start()
-            return HttpResponse("Checked out successfully")
+
+            messages.success(request, "Order Placed Successfully")
+            context = {
+                "order": order,
+                "myitems": myitems,
+                "totalCost": totalCost,
+                "successful": True,
+            }
+            return render(request, "checkout.html", context)
+            # return HttpResponse("Checked out successfully")
         else:
-            return HttpResponse("No Stock Available")
+            context = {
+                "order": None,
+                "myitems": None,
+                "totalCost": None,
+                "successful": False,
+                "item": notEnough,
+            }
+            return render(request, "checkout.html", context)
 
     context = {}
     context = {"items": items, "order": order}

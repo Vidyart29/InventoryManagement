@@ -5,21 +5,16 @@ from email.mime.text import MIMEText
 import os
 
 
-def sendMail(emailAddress, order, items):
+def sendMail(emailAddress, order, myitems, totalCost):
     fromEmail = os.getenv("GMAIL_APP_EMAIL")
     fromPassword = os.getenv("GMAIL_APP_SECRET_PASSWORD")
-    print(fromEmail)
+    # print(fromEmail)
     msg = MIMEMultipart("alternative")
 
     msg["Subject"] = f"Your iManage Order Confirmation. ID : {order.transaction_id}"
     msg["From"] = fromEmail
     msg["To"] = emailAddress
-    print("message settt")
-
-    myitems = ""
-    for i in items:
-        myitems += "<li>" + str(i) + "</li>"
-        totalCost = i.quantity * i.product.price
+    # print("message settt")
 
     text = "Your email client doesnt support html messages"
     html = f"""\
@@ -43,6 +38,8 @@ def sendMail(emailAddress, order, items):
     try:
         with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
             smtp.login(fromEmail, fromPassword)
+            print("sending mail to: ", emailAddress)
             smtp.sendmail(fromEmail, emailAddress, msg.as_string())
+            print("Mail sent")
     except Exception as e:
         print("Email not sent; Error : ", e)
