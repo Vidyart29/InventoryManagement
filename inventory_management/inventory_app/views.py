@@ -177,7 +177,7 @@ def cart(request):
             item.product.save()
 
             # Set transaction id
-            transaction_id = uuid.uuid4()[:8]
+            transaction_id = str(uuid.uuid4())[:8]
             order.transaction_id = transaction_id
 
             # Set the order to complete and save
