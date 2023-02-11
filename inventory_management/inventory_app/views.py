@@ -4,11 +4,13 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .models import *
 from django.conf import settings
-from django.core.mail import send_mail
 from .email import sendMail
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
+from threading import Thread
+import datetime
+import uuid
 
 # from .forms import SignUpForm
 
@@ -16,6 +18,51 @@ import json
 @login_required(login_url="login")
 def index(request):
     return render(request, "base.html")
+
+
+@login_required(login_url="login")
+def profile(request):
+    context = {}
+
+    if request.user.is_authenticated:
+        customer = request.user
+        orders = Order.objects.filter(customer=customer, complete=True)
+        # items = order.orderitem_set.all()
+        # print(items)
+        orderList = []
+        for order in orders:
+            # print(i.transaction_id)
+            items = order.orderitem_set.all()
+            # currOrder = {}
+            # currOrder.update('transaction_id': items.)
+            # orderList.append()
+            # print("tid: ", order.transaction_id)
+            # print("date: ", str(order.date_ordered))
+            # print(
+            #     "list :",
+            #     [str(i.product.productName + ":" + str(i.quantity)) for i in items],
+            # )
+            oneOrder = {
+                "transaction_id": order.transaction_id,
+                "date": str(order.date_ordered),
+                "itemsInOrder": [
+                    str(i.product.productName + ":" + str(i.quantity)) for i in items
+                ],
+                "noOfItems": int(len(items)),
+            }
+            orderList.append(oneOrder)
+            # for i in orderList:
+            #     print(i)
+
+    else:
+
+        order = {"get_cart_total": 0, "get_cart_items": 0}
+    # print()
+    # print(itemList)
+    context = {"orders": orderList}
+    # print(context)
+
+    return render(request, "profile.html", context)
 
 
 def signup(request):
@@ -110,24 +157,12 @@ def updateItem(request):
     return JsonResponse("Item was added", safe=False)
 
 
-def send_email(request):
-    # email= request.POST['email']
-    # bucode= request.POST['bucode']
-    sendMail("vidya.rautela.28@gmail.com", "bucode")
-
-    return HttpResponse("Submitted")
-
-
-def email(request):
-    return render(request, "email.html")
-
-
 @login_required(login_url="login")
 def cart(request):
     context = {}
 
     if request.user.is_authenticated:
-        customer = request.user.id
+        customer = request.user
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
         items = order.orderitem_set.all()
     else:
@@ -137,14 +172,28 @@ def cart(request):
     context = {"items": items, "order": order}
     # print("11111111111111111111                      ", customer)
 
+    if request.method == "POST":
+
+        # condition will be enough items in inventory
+        condition = True
+        if condition:
+            transaction_id = uuid.uuid4()
+            print("order started")
+            order.complete = True
+            order.transaction_id = transaction_id
+            order.date_ordered = datetime.datetime.now()
+            order.save()
+            print(created)
+            print("rder saved")
+
+            # email logic
+            content = request.POST.get("bucode")
+            email = request.user.email
+            thread = Thread(target=sendMail, args=(email, content))
+            thread.start()
+            # sendMail("dsouzajenslee@gmail.com", "hiiiiiiiiiiiiiii")
+            return HttpResponse("Checked out successfully")
+        else:
+            return HttpResponse("No Stock Available")
+
     return render(request, "cart.html", context)
-
-
-def checkout(request):
-    # condition will be for inventory stock checking
-    condition = True
-    if condition:
-        sendMail("dsouzajenslee@gmail.com", "bucode")
-        return HttpResponse("Checked out successfully")
-    else:
-        return HttpResponse("No Stock Available")

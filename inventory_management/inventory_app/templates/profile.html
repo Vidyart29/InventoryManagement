@@ -1,0 +1,52 @@
+{% extends "base.html" %} {% block content %}<!DOCTYPE html>
+{% load static %}
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>iManage</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      {%
+      comment
+      %}
+      href="{% static 'css/products.css' %}"
+      {%
+      endcomment
+      %}
+    />
+  </head>
+  <body>
+    <h1>Username: {{ request.user.username }}</h1>
+
+    <h1>Email: {{ request.user.username }}</h1>
+    <h1>Orders</h1>
+    <table style = "
+        border-collapse: separate;
+        border-spacing: 0 1em;
+    ">
+      <thead>
+        <tr>
+          <th>Transaction ID</th>
+          <th>Date Ordered</th>
+          <th>Items</th>
+          <th>Price</th>
+        </tr>
+      </thead>
+
+      {% for order in orders%}
+      <tr>
+        <td>{{ order.transaction_id }}</td>
+        <td>{{ order.date }}</td><ul>
+        <td>{% for item in order.itemsInOrder %}
+        <li>{{item}}
+        {% endfor %}</ul></td>
+        <td>42069</td>
+      </tr>
+      {% comment %}
+      <p>{{ orders['order'] }}</p>
+      {% endcomment %} {% endfor %}
+    </table>
+  </body>
+</html>
+{% endblock content %}

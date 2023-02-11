@@ -20,6 +20,15 @@
                 Total:<strong> ${{order.get_cart_total|floatformat:2}}</strong>
               </h5>
             </th>
+            <form method="POST">
+              {% csrf_token %}
+
+              <label for="bucode">BU Code</label>
+              <input type="text" placeholder="EU5" id="bucode" name="bucode" />
+
+              <button>Checkout</button>
+            </form>
+            {% comment %}
             <th>
               <a
                 style="float: right; margin: 5px"
@@ -27,6 +36,7 @@
                 href="{% url 'checkout' %}"
                 >Checkout</a
               >
+              {% endcomment %}
             </th>
           </tr>
         </table>
@@ -48,7 +58,7 @@
           </div>
           <div style="flex: 2"><p>{{item.product.productName}}</p></div>
           <div style="flex: 1">
-            <p>${{item.product.price|floatformat:2}}</p>
+            <p>₹{{item.product.price|floatformat:2}}</p>
           </div>
           <div style="flex: 1">
             <p class="quantity">{{item.quantity}}</p>
@@ -68,7 +78,7 @@
               />
             </div>
           </div>
-          <div style="flex: 1"><p>${{item.get_total|floatformat:2}}</p></div>
+          <div style="flex: 1"><p>₹{{item.get_total|floatformat:2}}</p></div>
         </div>
         {% endfor %}
       </div>
