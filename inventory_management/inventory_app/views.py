@@ -108,11 +108,11 @@ def products(request, cat="None"):
     # Products = Product.objects.filter(category__name__contains="Laptops")
     # print("cat ", type(cat))
     if cat != "None":
-        Products = Product.objects.filter(category__name__contains=cat)
+        Products = Product.objects.filter(category__name__contains=cat, disabled=False)
     else:
         # print("hi")
         cat = "All Products"
-        Products = Product.objects.all()
+        Products = Product.objects.filter(disabled=False)
     print(Products)
     return render(request, "products.html", {"products": Products, "cat": cat})
 
