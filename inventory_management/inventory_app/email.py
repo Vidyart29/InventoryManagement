@@ -1,10 +1,6 @@
 import smtplib
 from email.message import EmailMessage
-from dotenv import load_dotenv, find_dotenv
 import os
-
-
-load_dotenv(find_dotenv())
 
 
 def sendMail(emailAddress, Content):
