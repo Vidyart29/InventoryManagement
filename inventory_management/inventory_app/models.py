@@ -89,7 +89,14 @@ class Order(models.Model):
         return total
 
     def __str__(self):
-        return self.customer.username + "-" * 10 + "Complete: " + str(self.complete)
+        return (
+            self.customer.username
+            + "-" * 10
+            + "Complete: "
+            + str(self.complete)
+            + " id : "
+            + str(self.transaction_id)
+        )
 
 
 class OrderItem(models.Model):
