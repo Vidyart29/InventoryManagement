@@ -71,25 +71,28 @@ def signup(request):
             my_user.save()
             return redirect("login")
 
+    # Doesn't allow an already authenticated user to go to signup page
+    if request.user.is_authenticated:
+        return redirect("home")
     return render(request, "signup.html")
 
 
 def loginPage(request):
-    # print("ghhghghgh")
     if request.method == "POST":
         username1 = request.POST.get("username")
         pass1 = request.POST.get("password")
         user = authenticate(request, username=username1, password=pass1)
 
-        # print(user)
         if user is not None:
             login(request, user)
-            # print("HIeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
             return redirect("products")
 
         else:
             return HttpResponse("Username or password is incorrect")
 
+    # Doesn't allow an already authenticated user to go to signup page
+    if request.user.is_authenticated:
+        return redirect("home")
     return render(request, "login.html")
 
 
