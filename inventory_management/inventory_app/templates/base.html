@@ -22,7 +22,9 @@
       <nav>
         <div class="logo">
           <img
-            src="{% static 'applogo.png' %}" width="150" height="100"
+            src="{% static 'applogo.png' %}"
+            width="150"
+            height="100"
             alt="Website Logo Placeholder"
           />
         </div>
@@ -30,7 +32,9 @@
           <span class="toggle">☰</span>
         </div>
         <ul class="list-item">
-          {% if request.user.is_authenticated %}
+          {% if request.user.is_superuser %}
+          <li><a href="{% url 'admin:index' %}">Admin Panel</a></li>
+          {% endif %} {% if request.user.is_authenticated %}
           <li><a href="{%  url 'categories' %}">Categories</a></li>
           <li><a href="{%  url 'products' None %}">Products</a></li>
           <li><a href="{%  url 'cart' %}">Cart</a></li>

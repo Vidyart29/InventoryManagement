@@ -14,14 +14,14 @@ from django.contrib.auth.models import User
 #         return self.firstName + " " + self.lastName
 
 
-class Admin(models.Model):
-    firstName = models.CharField(max_length=30)
-    lastName = models.CharField(max_length=30)
-    passwordHash = models.CharField(max_length=100)
-    email = models.CharField(unique=True, max_length=30)
+# class Admin(models.Model):
+#     firstName = models.CharField(max_length=30)
+#     lastName = models.CharField(max_length=30)
+#     passwordHash = models.CharField(max_length=100)
+#     email = models.CharField(unique=True, max_length=30)
 
-    def __str__(self):
-        return self.firstName + " " + self.lastName
+#     def __str__(self):
+#         return self.firstName + " " + self.lastName
 
 
 class ProductCategorie(models.Model):
@@ -75,6 +75,7 @@ class Order(models.Model):
     date_ordered = models.DateField(auto_now_add=True)
     transaction_id = models.CharField(max_length=200, null=True)
     complete = models.BooleanField(default=False, null=True, blank=False)
+    buCode = models.CharField(max_length=30, default="0000")
 
     @property
     def get_cart_total(self):
@@ -94,6 +95,7 @@ class Order(models.Model):
             + "-" * 10
             + "Complete: "
             + str(self.complete)
+            + "-" * 10
             + " id : "
             + str(self.transaction_id)
         )

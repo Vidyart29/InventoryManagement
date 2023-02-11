@@ -25,42 +25,36 @@ def profile(request):
     context = {}
 
     if request.user.is_authenticated:
+        # Get all completed orders for current logged in user
         customer = request.user
         orders = Order.objects.filter(customer=customer, complete=True)
-        # items = order.orderitem_set.all()
-        # print(items)
+
+        # Construct a list of orders as a list of dictionaries
         orderList = []
         for order in orders:
-            # print(i.transaction_id)
             items = order.orderitem_set.all()
-            # currOrder = {}
-            # currOrder.update('transaction_id': items.)
-            # orderList.append()
-            # print("tid: ", order.transaction_id)
-            # print("date: ", str(order.date_ordered))
-            # print(
-            #     "list :",
-            #     [str(i.product.productName + ":" + str(i.quantity)) for i in items],
-            # )
+
+            itemsInOrder = []
+            for item in items:
+                totalCost = item.quantity * item.product.price
+                itemsInOrder.append(
+                    str(item.product.productName + " : " + str(item.quantity))
+                )
+
+            # Construct a dictionary for every orders' attributes
             oneOrder = {
                 "transaction_id": order.transaction_id,
+                "buCode": order.buCode,
                 "date": str(order.date_ordered),
-                "itemsInOrder": [
-                    str(i.product.productName + ":" + str(i.quantity)) for i in items
-                ],
+                "itemsInOrder": itemsInOrder,
                 "noOfItems": int(len(items)),
+                "totalCost": totalCost,
             }
+
             orderList.append(oneOrder)
-            # for i in orderList:
-            #     print(i)
 
-    else:
-
-        order = {"get_cart_total": 0, "get_cart_items": 0}
-    # print()
-    # print(itemList)
-    context = {"orders": orderList}
-    # print(context)
+    # Reverse the list so that new orders come up first
+    context = {"orders": orderList[::-1]}
 
     return render(request, "profile.html", context)
 
@@ -78,25 +72,28 @@ def signup(request):
             my_user.save()
             return redirect("login")
 
+    # Doesn't allow an already authenticated user to go to signup page
+    if request.user.is_authenticated:
+        return redirect("home")
     return render(request, "signup.html")
 
 
 def loginPage(request):
-    # print("ghhghghgh")
     if request.method == "POST":
         username1 = request.POST.get("username")
         pass1 = request.POST.get("password")
         user = authenticate(request, username=username1, password=pass1)
 
-        # print(user)
         if user is not None:
             login(request, user)
-            # print("HIeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
             return redirect("products")
 
         else:
             return HttpResponse("Username or password is incorrect")
 
+    # Doesn't allow an already authenticated user to go to signup page
+    if request.user.is_authenticated:
+        return redirect("home")
     return render(request, "login.html")
 
 
@@ -159,41 +156,43 @@ def updateItem(request):
 
 @login_required(login_url="login")
 def cart(request):
-    context = {}
-
-    if request.user.is_authenticated:
-        customer = request.user
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        items = order.orderitem_set.all()
-    else:
-        items = []
-        order = {"get_cart_total": 0, "get_cart_items": 0}
-
-    context = {"items": items, "order": order}
-    # print("11111111111111111111                      ", customer)
+    customer = request.user
+    order, created = Order.objects.get_or_create(customer=customer, complete=False)
+    items = order.orderitem_set.all()
 
     if request.method == "POST":
+        bu_code = request.POST.get("bucode")
+        # Check if there are enough items in stock
+        for item in items:
+            if item.quantity <= item.product.quantity:
+                enoughInventory = True
+            else:
+                enoughInventory = False
 
-        # condition will be enough items in inventory
-        condition = True
-        if condition:
-            transaction_id = uuid.uuid4()
-            print("order started")
-            order.complete = True
+        if enoughInventory:
+            # Remove the items from inventory
+            item.product.quantity -= item.quantity
+            item.product.save()
+
+            # Set transaction id and bu_code
+            transaction_id = str(uuid.uuid4())[:8]
             order.transaction_id = transaction_id
+            order.buCode = bu_code
+
+            # Set the order to complete and save
+            order.complete = True
             order.date_ordered = datetime.datetime.now()
             order.save()
-            print(created)
-            print("rder saved")
 
             # email logic
-            content = request.POST.get("bucode")
+            content = bu_code
             email = request.user.email
             thread = Thread(target=sendMail, args=(email, content))
             thread.start()
-            # sendMail("dsouzajenslee@gmail.com", "hiiiiiiiiiiiiiii")
-            return redirect(url_name)
+            return HttpResponse("Checked out successfully")
         else:
             return HttpResponse("No Stock Available")
 
+    context = {}
+    context = {"items": items, "order": order}
     return render(request, "cart.html", context)
