@@ -104,16 +104,11 @@ def logoutPage(request):
 
 @login_required(login_url="login")
 def products(request, cat="None"):
-    # id = ProductCategorie.objects.filter(category__name="Laptop")
-    # Products = Product.objects.filter(category__name__contains="Laptops")
-    # print("cat ", type(cat))
     if cat != "None":
         Products = Product.objects.filter(category__name__contains=cat, disabled=False)
     else:
-        # print("hi")
         cat = "All Products"
         Products = Product.objects.filter(disabled=False)
-    print(Products)
     return render(request, "products.html", {"products": Products, "cat": cat})
 
 
@@ -127,16 +122,11 @@ def categories(request):
 @csrf_exempt
 def updateItem(request):
     data = json.loads(request.body)
-    print(data)
     productId = data["productId"]
     action = data["action"]
 
-    print("aciton: ", action)
-    print("prouct: ", productId)
-
-    # print(request)
     customer = request.user
-    print(customer)
+
     product = Product.objects.get(id=productId)
     order, created = Order.objects.get_or_create(customer=customer, complete=False)
     orderItem, created = OrderItem.objects.get_or_create(order=order, product=product)
