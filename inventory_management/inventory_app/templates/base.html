@@ -13,7 +13,10 @@
       var user = "{{request.user}}";
     </script>
   </head>
-  <body>
+
+  <!-- <body id="background">  -->
+      <body style="background: linear-gradient(to right,#0e4b74, #375491, #a54e3d,#80500e );;">
+         
     <header>
       <nav>
         <div class="logo">
@@ -38,7 +41,7 @@
           <li><a href="{%  url 'signup' %}">Signup</a></li>
           <li><a href="{%  url 'login' %}">Login</a></li>
           {%endif%} {% if request.user.is_authenticated %}
-          <li><a href="{%  url 'profile' %}">Profile : {{request.user}}</a></li>
+          <li><a href="{%  url 'profile' %}">Hello, {{request.user}}</a></li>
           <li><a href="{%  url 'logout' %}">Logout</a></li>
           {% endif %}
         </ul>
