@@ -5,13 +5,10 @@
     <meta charset="UTF-8" />
   </head>
   <body >
-    <div class="details">
-
-  
+    <div >
     <h1>Username: {{ request.user.username }}</h1>
-
     <h1>Email: {{ request.user.email }}</h1>
-
+    </div>
     <link
       href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&amp;subset=cyrillic,cyrillic-ext,greek,greek-ext,latin-ext,vietnamese"
       rel="stylesheet"
@@ -69,7 +66,7 @@
     />
 
     <div class="table-responsive pb-5">
-      <table id="tbOrderHistory" class="table border ps-table w-100 mb-3">
+      <table id="tbOrderHistory" class="table border ps-table w-100 mb-3" style="size: 5px; font-size: large;">
         <thead>
           <tr>
             <th class="font-weight-bold py-2 border-0">Transaction ID</th>
@@ -79,7 +76,7 @@
             <th class="font-weight-bold py-2 border-0">Total Order Cost</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody style="color: black;">
           {% for order in orders%}
           <tr>
             <td>{{ order.transaction_id }}</td>
