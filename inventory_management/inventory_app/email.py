@@ -30,6 +30,41 @@ def sendMail(emailAddress, order, myitems, totalCost):
     </html>
     """
 
+    html = f"""\
+        <html>
+    <head></head>
+        <body>
+    <center style="margin-bottom: 7%; margin-top: 2%">
+      <h1>
+        Woohoo!!🎉<br />
+        ✨Order Placed Successfully✨
+      </h1>
+    </center>
+    <center>
+      <table style="border: 1px solid black; text-align: center">
+        <tr>
+          <th>Transaction ID:</th>
+          <td>{order.transaction_id}</td>
+        </tr>
+        <tr>
+          <th>BU Code:</th>
+          <td>{order.buCode}</td>
+        </tr>
+        <tr>
+          <th>Date Ordered:</th>
+          <td>{ order.date_ordered }</td>
+        </tr>
+        <tr>
+          <th>Ordered Items:</th>
+          <td>{", ".join(myitems)}</td>
+        </tr>
+        <tr>
+          <th>Order Cost:</th>
+          <td>{totalCost}</td>
+        </tr>
+        </html>
+        """
+
     # Record the MIME types of both parts - text/plain and text/html.
 
     msg.attach(MIMEText(text, "plain"))
