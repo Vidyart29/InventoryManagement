@@ -1,42 +1,50 @@
 {% extends 'base.html' %} {% load static %} {% block content %}
+
 <head>
   <link rel="stylesheet" href="{% static 'css/cart.css' %}" />
 </head>
+
 <body>
   <div class="row">
     <div class="col-lg-12">
-      <div class="box-element">
-        <table class="table">
+      <div style="align-content: center;">
+
+        <div class="form" style="text-align: center;">
+          <form method="POST">
+            {% csrf_token %}
+
+            <label for="bucode" style="font-weight: bold; font-size: large;">BU Code</label>
+            <input type="text" placeholder="EU5" id="bucode" value="0000" name="bucode"
+              style="border: 15px; text-align: center; height: 27px; background-color: antiquewhite; border-radius: 5px;" />
+
+            <button style="padding: 5px 5px 5px 5px; border-radius: 5px; background-color: burlywood">Checkout</button>
+<br>
+            <br>  
+          <p style="font-size: large;"> Items: <strong>{{order.get_cart_items}}</strong></p> 
+          <br>
+          <p style="font-size: large;"> Total:<strong> ${{order.get_cart_total|floatformat:2}}</strong></p>
+          </form>
+        </div>
+        <br>
+        <div id="table" style="align-content: center;">
+        <!-- <table style="color: bisque">
           <tr>
             <th>
-              <h5>Items: <strong>{{order.get_cart_items}}</strong></h5>
+            <td>Items: <strong>{{order.get_cart_items}}</strong></td>
             </th>
             <th>
-              <h5>
-                Total:<strong> ${{order.get_cart_total|floatformat:2}}</strong>
-              </h5>
+            <td>
+              Total:<strong> ${{order.get_cart_total|floatformat:2}}</strong>
+            </td>
             </th>
-            <form method="POST">
-              {% csrf_token %}
-
-              <label for="bucode">BU Code</label>
-              <input
-                type="text"
-                placeholder="EU5"
-                id="bucode"
-                value="0000"
-                name="bucode"
-              />
-
-              <button>Checkout</button>
-            </form>
             </th>
           </tr>
-        </table>
+        </table> -->
       </div>
-
+      </div>
+      <br>
       <br />
-      <div class="box-element">
+      <div style="font-size: large;">
         <div class="cart-row">
           <div style="flex: 2"></div>
           <div style="flex: 2"><strong>Item</strong></div>
@@ -49,29 +57,25 @@
           <div style="flex: 2">
             <img class="row-image" src="{{item.product.image}}" />
           </div>
-          <div style="flex: 2"><p>{{item.product.productName}}</p></div>
+          <div style="flex: 2">
+            <p>{{item.product.productName}}</p>
+          </div>
           <div style="flex: 1">
             <p>₹{{item.product.price|floatformat:2}}</p>
           </div>
           <div style="flex: 1">
             <p class="quantity">{{item.quantity}}</p>
             <div class="quantity">
-              <img
-                data-product="{{item.product.id}}"
-                data-action="add"
-                class="chg-quantity update-cart"
-                src="{% static  'images/arrow-up.png' %}"
-              />
+              <img data-product="{{item.product.id}}" data-action="add" class="chg-quantity update-cart"
+                src="{% static  'images/arrow-up.png' %}" />
 
-              <img
-                data-product="{{item.product.id}}"
-                data-action="remove"
-                class="chg-quantity update-cart"
-                src="{% static  'images/arrow-down.png' %}"
-              />
+              <img data-product="{{item.product.id}}" data-action="remove" class="chg-quantity update-cart"
+                src="{% static  'images/arrow-down.png' %}" />
             </div>
           </div>
-          <div style="flex: 1"><p>₹{{item.get_total|floatformat:2}}</p></div>
+          <div style="flex: 1">
+            <p>₹{{item.get_total|floatformat:2}}</p>
+          </div>
         </div>
         {% endfor %}
       </div>

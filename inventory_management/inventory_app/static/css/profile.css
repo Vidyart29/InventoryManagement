@@ -35,7 +35,7 @@ table.dataTable thead th.sorting_desc:after {
 table.dataTable thead th.sorting:after {
     transform: translateY(5px);
     opacity: 0;
-    color: #b0bec5 !important;
+    color: #6c9fb9 !important;
 }
 
 table.dataTable thead th.sorting:after,
@@ -59,3 +59,4 @@ table.dataTable thead th.sorting_desc:before,
 table.dataTable thead th.sorting_asc:before {
     display: none;
 }
+
