@@ -16,12 +16,38 @@
   </head>
   <body>
     {% if successful %}
-    <center><h1>Order Placed Successfully</h1></center>
-    <h3>Transaction ID: {{order.transaction_id}}</h3>
+      <center style="margin-bottom: 7%; margin-top: 2%;"><h1>Woohoo!!🎉<br> ✨Order Placed Successfully✨</h1></center>
+      <center>
+    <table  style= "border: 1px solid black ; text-align: center;">
+      <tr>
+        <th>Transaction ID:</th>
+        <td> {{order.transaction_id}}</td>
+      </tr>
+      <tr>
+        <th>BU Code: </th>
+        <td>{{order.buCode}}</td>
+      </tr>
+      <tr>
+        <th>Date Ordered: </th>
+        <td>{{ order.date_ordered }}</td>
+      </tr>
+      <tr>
+        <th>Ordered Items:</th>
+        <td>{{myitems|join:", "}}</td>
+      </tr>
+      <tr>
+        <th>Order Cost:</th>
+        <td>{{totalCost}}</td>
+      </tr>
+ 
+    <!-- <center><h1>Order Placed Successfully</h1></center> -->
+    <!-- <h3>Transaction ID: {{order.transaction_id}}</h3>
     <h3>BU Code: {{order.buCode}}</h3>
     <h3>Date Ordered: {{ order.date_ordered }}</h3>
     <h3>Ordered Items: {{myitems|join:", "}}</h3>
-    <h3>Order Cost: {{totalCost}}</h3>
+    <h3>Order Cost: {{totalCost}}</h3> -->
+  </table>
+</center>
   </body>
 </html>
 {%else %}
