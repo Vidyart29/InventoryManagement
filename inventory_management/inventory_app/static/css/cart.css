@@ -1,17 +1,17 @@
 body{
-	background-color: hsl(0, 0%, 98%);
+	background-color: hsla(0, 0%, 98%, 0.5);
 }
 
 h1,h2,h3,h4,h5,h6{
 	color:hsl(0, 0%, 30%);
 }
 
-.box-element{
+/* .box-element{
 	box-shadow:hsl(0, 0%, 80%) 0 0 16px;
-	background-color: #fff;
+	background-color: #a35f5f;
 	border-radius: 4px;
 	padding: 10px;
-}
+} */
 
 .thumbnail{
 	width: 100%;
@@ -35,16 +35,16 @@ h1,h2,h3,h4,h5,h6{
 	margin-left: 15px;
 }
 
-#cart-total{
+/* #cart-total{
 	display: block;
 	text-align: center;
-	color:#fff;
+	color:#ffffff;
 	background-color: red;
 	width: 20px;
 	height: 25px;
 	border-radius: 50%;
 	font-size: 14px;
-}
+} */
 
 .col-lg-4, .col-lg-6, .col-lg-8, .col-lg-12{
 	margin-top: 10px;
