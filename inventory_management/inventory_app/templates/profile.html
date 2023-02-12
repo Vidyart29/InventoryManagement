@@ -59,14 +59,17 @@
     href="https://gensuiteqa.genalphacatalog.com/gensuite/css/ps/orderhistory.css?version=0707050300507050503"
   />
   </head>
-  <body color: #0c0c0c>
-    <div class="details">
+  <body >
+    <br>
+    <div class="details" >
   
-    <h1>Username: {{ request.user.username }}</h1>
+    <h1 style="font-size: 20px; font-weight: bold; padding-left: 30%;">Username: {{ request.user.username }}</h1>
 
-    <h1>Email: {{ request.user.email }}</h1>
+    <h1 style="font-size: 20px; font-weight: bold; padding-left: 30%;">Email: {{ request.user.email }}</h1>
 
     </div>
+    <br>
+
     <div class="table-responsive pb-5">
       <table id="tbOrderHistory" class="table border ps-table w-100 mb-3" style="size: 5px; font-size: large;">
         <thead>
@@ -78,7 +81,7 @@
             <th class="font-weight-bold py-2 border-0">Total Order Cost</th>
           </tr>
         </thead>
-        <tbody style="color: black;">
+        <tbody style="color: black; font-size: large;">
           {% for order in orders%}
           <tr>
             <td>{{ order.transaction_id }}</td>
