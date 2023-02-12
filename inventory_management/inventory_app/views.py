@@ -208,7 +208,6 @@ def cart(request):
             thread = Thread(target=sendMail, args=(email, order, myitems, totalCost))
             thread.start()
 
-            messages.success(request, "Order Placed Successfully")
             context = {
                 "order": order,
                 "myitems": myitems,
