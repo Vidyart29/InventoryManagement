@@ -162,9 +162,20 @@ def cart(request):
 
     if request.method == "POST":
         bu_code = request.POST.get("bucode")
+
         # Check if there are enough items in stock
+        # Create a list of products and their selected quantities to send to email and checkout page
         notEnough = []
+        myitems = []
         for item in items:
+            myitems.append(
+                "'"
+                + str((item.product.productName))
+                + "'"
+                + " * "
+                + str((item.quantity))
+            )
+            totalCost = item.quantity * item.product.price
             if item.quantity <= item.product.quantity:
                 enoughInventory = True
             else:
@@ -191,12 +202,6 @@ def cart(request):
             order.complete = True
             order.date_ordered = datetime.datetime.now()
             order.save()
-
-            # Util logic
-            myitems = []
-            for i in items:
-                myitems.append(str(i))
-                totalCost = i.quantity * i.product.price
 
             # Email logic
             email = request.user.email

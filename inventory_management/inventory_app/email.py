@@ -24,7 +24,7 @@ def sendMail(emailAddress, order, myitems, totalCost):
     <h3>Transaction ID: {order.transaction_id}</h3>
     <h3>BU Code: {order.buCode}</h3>
     <h3>Date Ordered: {(order.date_ordered).date()}</h3>
-    <h3>Ordered Items: {myitems}</h3>
+    <h3>Ordered Items: {", ".join(myitems)}</h3>
     <h3>Order Cost: {totalCost}</h3>
     </body>
     </html>
