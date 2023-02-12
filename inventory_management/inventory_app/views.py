@@ -166,10 +166,7 @@ def cart(request):
                 + str((item.quantity))
             )
             totalCost = item.quantity * item.product.price
-            if item.quantity <= item.product.quantity:
-                enoughInventory = True
-            else:
-                enoughInventory = False
+            if item.quantity > item.product.quantity:
                 notEnough.append(
                     {
                         "productName": item.product.productName,
@@ -178,7 +175,7 @@ def cart(request):
                     }
                 )
 
-        if enoughInventory:
+        if len(notEnough) == 0:
             # Remove the items from inventory
             item.product.quantity -= item.quantity
             item.product.save()
