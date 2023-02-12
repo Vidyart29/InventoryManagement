@@ -117,9 +117,3 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return str(self.product) + " : " + str(self.quantity)
-
-
-# Cart
-class Cart(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    Product = models
