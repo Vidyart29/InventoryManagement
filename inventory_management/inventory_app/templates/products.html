@@ -16,7 +16,12 @@
         <div class="product-grid">
           {% for product in products%}
           <div class="product">
-            <img src="{{ product.image }}" alt="Photo of laptop" />
+            <img
+              src="{{ product.image }}"
+              alt="Photo of {{ product.productName }}"
+              width="350"
+              height="350"
+            />
             <h3>Product Name: {{product.productName}}</h3>
             <h4>Price: ₹{{product.price}}</h4>
             <p>Features: {{product.description}}</p>
@@ -37,4 +42,4 @@
     </footer>
   </body>
 </html>
-{% endblock content %} 
+{% endblock content %}
