@@ -3,7 +3,6 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>iManage</title>
     <link
       rel="stylesheet"
       type="text/css"
@@ -17,11 +16,15 @@
         <div class="product-grid">
           {% for product in products%}
           <div class="product">
-            <img src="{{ product.image }}" alt="Photo of laptop" />
-            <h3>{{product.productname}}</h3>
-            <h4>₹{{product.price}}</h4>
-            <br />
-            <p>{{product.description}}</p>
+            <img
+              src="{{ product.image }}"
+              alt="Photo of {{ product.productName }}"
+              width="350"
+              height="350"
+            />
+            <h3>Product Name: {{product.productName}}</h3>
+            <h4>Price: ₹{{product.price}}</h4>
+            <p>Features: {{product.description}}</p>
             <button
               data-product="{{product.id}}"
               data-action="add"
@@ -39,14 +42,4 @@
     </footer>
   </body>
 </html>
-{% endblock content %} {% comment %} {% for product in products %}
-<div class="card" style="width: 18rem">
-  <img class="card-img-top" src="{{ product.image }}" alt="Card image cap" />
-  <div class="card-body">
-    <h5 class="card-title">{{ product.productname }}</h5>
-    <p class="card-text">{{ product.description }}</p>
-    <p class="card-text">Price - {{ product.price }}</p>
-    <a href="#" class="btn btn-primary">Buy Now</a>
-  </div>
-</div>
-{% endfor %} {% endcomment %}
+{% endblock content %}

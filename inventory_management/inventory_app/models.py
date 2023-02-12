@@ -45,6 +45,7 @@ class Product(models.Model):
         ProductCategorie, default=1, on_delete=models.SET_DEFAULT
     )
     image = models.CharField(max_length=5000, null=True, blank=True)
+    disabled = models.BooleanField(default=False)
 
     @staticmethod
     def get_all_products():

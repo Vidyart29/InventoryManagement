@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .models import *
-from django.conf import settings
 from .email import sendMail
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -11,6 +10,7 @@ import json
 from threading import Thread
 import datetime
 import uuid
+from django.contrib import messages
 
 # from .forms import SignUpForm
 
@@ -104,16 +104,11 @@ def logoutPage(request):
 
 @login_required(login_url="login")
 def products(request, cat="None"):
-    # id = ProductCategorie.objects.filter(category__name="Laptop")
-    # Products = Product.objects.filter(category__name__contains="Laptops")
-    # print("cat ", type(cat))
     if cat != "None":
-        Products = Product.objects.filter(category__name__contains=cat)
+        Products = Product.objects.filter(category__name__contains=cat, disabled=False)
     else:
-        # print("hi")
         cat = "All Products"
-        Products = Product.objects.all()
-    print(Products)
+        Products = Product.objects.filter(disabled=False)
     return render(request, "products.html", {"products": Products, "cat": cat})
 
 
@@ -127,16 +122,11 @@ def categories(request):
 @csrf_exempt
 def updateItem(request):
     data = json.loads(request.body)
-    print(data)
     productId = data["productId"]
     action = data["action"]
 
-    print("aciton: ", action)
-    print("prouct: ", productId)
-
-    # print(request)
     customer = request.user
-    print(customer)
+
     product = Product.objects.get(id=productId)
     order, created = Order.objects.get_or_create(customer=customer, complete=False)
     orderItem, created = OrderItem.objects.get_or_create(order=order, product=product)
@@ -162,12 +152,31 @@ def cart(request):
 
     if request.method == "POST":
         bu_code = request.POST.get("bucode")
+
         # Check if there are enough items in stock
+        # Create a list of products and their selected quantities to send to email and checkout page
+        notEnough = []
+        myitems = []
         for item in items:
+            myitems.append(
+                "'"
+                + str((item.product.productName))
+                + "'"
+                + " * "
+                + str((item.quantity))
+            )
+            totalCost = item.quantity * item.product.price
             if item.quantity <= item.product.quantity:
                 enoughInventory = True
             else:
                 enoughInventory = False
+                notEnough.append(
+                    {
+                        "productName": item.product.productName,
+                        "requestedQuantity": item.quantity,
+                        "availableQuantity": item.product.quantity,
+                    }
+                )
 
         if enoughInventory:
             # Remove the items from inventory
@@ -184,14 +193,28 @@ def cart(request):
             order.date_ordered = datetime.datetime.now()
             order.save()
 
-            # email logic
-            content = bu_code
+            # Email logic
             email = request.user.email
-            thread = Thread(target=sendMail, args=(email, content))
+            thread = Thread(target=sendMail, args=(email, order, myitems, totalCost))
             thread.start()
-            return HttpResponse("Checked out successfully")
+
+            context = {
+                "order": order,
+                "myitems": myitems,
+                "totalCost": totalCost,
+                "successful": True,
+            }
+            return render(request, "checkout.html", context)
+            # return HttpResponse("Checked out successfully")
         else:
-            return HttpResponse("No Stock Available")
+            context = {
+                "order": None,
+                "myitems": None,
+                "totalCost": None,
+                "successful": False,
+                "item": notEnough,
+            }
+            return render(request, "checkout.html", context)
 
     context = {}
     context = {"items": items, "order": order}
